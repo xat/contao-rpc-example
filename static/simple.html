@@ -20,7 +20,7 @@
                     methods: {
                         read:   'Todo.retrieve',
                         create: 'Todo.create',
-                        remove: 'Todo.delete',
+                        delete: 'Todo.delete',
                         update: 'Todo.update'
                     }
                 });
@@ -53,6 +53,15 @@
                         collection.forEach(function(model) {
                             console.log(model.get('title'));
                         });
+
+                        console.log(collection.first().get('id'));
+
+                        var first = collection.first();
+                        first.set('title', 'UPDATE');
+                        first.save();
+
+                        var last = collection.last();
+                        last.destroy();
                     }
                 })
             });

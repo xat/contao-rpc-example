@@ -77,15 +77,13 @@ class TodoController extends \System{
 	 */
 	public function update($objRequest, $objResponse)
 	{
-		$arrData = $objRequest->getParams();
-
-		$objTodo = TodoModel::findByPk($arrData['id']);
+		$objData = $objRequest->getParams();
+		$objTodo = \TodoModel::findByPk($objData->id);
 		if (isset($objTodo))
 		{
-			$objTodo->title  = $arrData['title'];
-			$objTodo->done   = strlen($arrData['done']);
+			$objTodo->title  = $objData->title;
+			$objTodo->done   = strlen($objData->done);
 			$objTodo->author = $this->User->id;
-
 			$objTodo->save();
 		}
 		else
@@ -101,12 +99,13 @@ class TodoController extends \System{
 	 */
 	public function delete($objRequest, $objResponse)
 	{
-		$arrData = $objRequest->getParams();
+		$objData = $objRequest->getParams();
+		$objTodo = \TodoModel::findByPk($objData->id);
 
-		$objTodo = TodoModel::findByPk($arrData['id']);
 		if (isset($objTodo))
 		{
 			$objTodo->delete();
+			//$objResponse->setData($objData->id);
 		}
 		else
 		{
