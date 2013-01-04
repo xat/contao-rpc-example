@@ -84,7 +84,7 @@ class TodoController extends \System{
 			$objTodo->done   = strlen($arrData['done']);
 			$objTodo->author = $this->User->id;
 
-			$objTodo->save(true);
+			$objTodo->save();
 		}
 		else
 		{
