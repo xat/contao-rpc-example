@@ -39,7 +39,14 @@ class TodoController extends \System{
 		$objTodo->author = $this->User->id;
 		$objTodo->tstamp = time();
 
-		$objTodo->save();
+		$objTodo = $objTodo->save();
+		$arrData = array
+		(
+			'id'    => $objTodo->id,
+			'title' => $objTodo->title,
+			'done'  => strlen($objTodo->done) ? true : false
+		);
+		$objResponse->setData($arrData);
 	}
 
 	/**
