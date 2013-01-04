@@ -82,7 +82,7 @@ class TodoController extends \System{
 		}
 		else
 		{
-			$objResponse->setErrorType(8);
+			$objResponse->setErrorType(RpcResponse::INVALID_PARAMS);
 		}
 	}
 
@@ -102,7 +102,7 @@ class TodoController extends \System{
 		}
 		else
 		{
-			$objResponse->setErrorType(8);
+			$objResponse->setErrorType(RpcResponse::INVALID_PARAMS);
 		}
 	}
 }
