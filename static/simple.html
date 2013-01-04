@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script src="libs/jquery-1.8.3.min.js"></script>
+    <script src="libs/underscore.js"></script>
+    <script src="libs/backbone.js"></script>
+    <script src="app/sync.js"></script>
+
+    <script>
+        (function($, Backbone) {
+            $(function() {
+
+                var TodoModel = Backbone.Model.extend({
+                    url: '/rpc.php',
+                    postParams: {
+                      'fe_username': 'j.smith',
+                      'fe_password': 'johnsmith'
+                    },
+                    methods: {
+                        read:   'Todo.retrieve',
+                        create: 'Todo.create',
+                        remove: 'Todo.delete',
+                        update: 'Todo.update'
+                    }
+                });
+
+                var todoItem = new TodoModel();
+
+                todoItem.set('title', 'Mit Hund Gassi gehen.');
+                todoItem.set('done', '1');
+                todoItem.save();
+            });
+        })(jQuery, Backbone);
+    </script>
+</head>
+<body>
+
+
+</body>
+</html>

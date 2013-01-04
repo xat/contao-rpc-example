@@ -21,7 +21,7 @@ class TodoController extends \System{
 	public function __construct()
 	{
 		parent::__construct();
-		$this->import('FrontendUser', 'User');
+		$this->import('\Contao\Rpc\RpcFrontendUser', 'User');
 	}
 
 	/**
@@ -31,12 +31,13 @@ class TodoController extends \System{
 	 */
 	public function create($objRequest, $objResponse)
 	{
-		$arrData = $objResponse->getParams();
+		$objData = $objRequest->getParams();
 		$objTodo = new TodoModel();
 
-		$objTodo->title  = $arrData['title'];
-		$objTodo->done   = strlen($arrData['done']);
+		$objTodo->title  = $objData->title;
+		$objTodo->done   = $objData->done;
 		$objTodo->author = $this->User->id;
+		$objTodo->tstamp = time();
 
 		$objTodo->save();
 	}
