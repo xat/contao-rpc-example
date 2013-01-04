@@ -131,8 +131,9 @@
     },
 
     remove: function() {
+      //this.remove();
       this.model.destroy();
-      this.remove();
+      this.$el.hide();
     }
 
   });
