@@ -12,9 +12,10 @@
 
     initialize: function() {
       this.collection = new App.TaskCollection();
+      this.user = new App.UserModel();
 
-      this.loginView = new App.LoginView({ el: this.$('#signup') });
-      this.addView   = new App.AddTaskView({ el: this.$('#add'), collection: this.collection });
+      this.loginView = new App.LoginView({ el: this.$('#signup'), model: this.user });
+      this.addView   = new App.AddTaskView({ el: this.$('#add'), collection: this.collection, model: this.user });
       this.listView  = new App.TaskListView({ el: this.$('#list'), collection: this.collection });
     }
 
@@ -28,7 +29,6 @@
     },
 
     initialize: function() {
-      this.model = new App.UserModel();
       this.model.on('change:hash', this.hide, this);
     },
 
@@ -79,7 +79,6 @@
   App.TaskListView = Backbone.View.extend({
 
     initialize: function() {
-      this.collection = new App.TaskCollection();
       this.collection.on('reset', this.render, this);
       this.collection.on('add', this.add, this);
       this.collection.fetch();
@@ -117,7 +116,7 @@
     },
 
     render: function() {
-      this.$el.html(this.model.toJSON());
+      this.$el.html(this.template(this.model.toJSON()));
       return this;
     },
 
@@ -163,7 +162,7 @@
    * COLLECTIONS
    */
 
-  App.TaskCollection = Backbone.Model.extend({
+  App.TaskCollection = Backbone.Collection.extend({
 
     url: '/rpc.php',
 
