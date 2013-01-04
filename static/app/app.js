@@ -133,7 +133,7 @@
     remove: function() {
       //this.remove();
       this.model.destroy();
-      this.$el.hide();
+      this.$el.remove();
     }
 
   });
