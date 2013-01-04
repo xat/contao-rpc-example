@@ -28,7 +28,6 @@ class TodoController extends \System{
 	 * Create a new todo
 	 * @param  object $objRequest  Request object
 	 * @param  object $objResponse Response object
-	 * @return object              Response object
 	 */
 	public function create($objRequest, $objResponse)
 	{
@@ -40,15 +39,12 @@ class TodoController extends \System{
 		$objTodo->author = $this->User->id;
 
 		$objTodo->save();
-
-		return $objResponse;
 	}
 
 	/**
 	 * Retrieve all todos and return them
 	 * @param  object $objRequest  Request object
 	 * @param  object $objResponse Response object
-	 * @return object              Response object
 	 */
 	public function retrieve($objRequest, $objResponse)
 	{
@@ -64,14 +60,12 @@ class TodoController extends \System{
 			);
 		}
 		$objResponse->setData($arrData);
-		return $objResponse;
 	}
 
 	/**
 	 * Update a todo
 	 * @param  object $objRequest  Request object
 	 * @param  object $objResponse Response object
-	 * @return object              Response object
 	 */
 	public function update($objRequest, $objResponse)
 	{
@@ -90,14 +84,12 @@ class TodoController extends \System{
 		{
 			$objResponse->setErrorType(8);
 		}
-		return $objResponse;
 	}
 
 	/**
 	 * Delete a todo
 	 * @param  object $objRequest  Request object
 	 * @param  object $objResponse Response object
-	 * @return object              Response object
 	 */
 	public function delete($objRequest, $objResponse)
 	{
@@ -112,6 +104,5 @@ class TodoController extends \System{
 		{
 			$objResponse->setErrorType(8);
 		}
-		return $objResponse;
 	}
 }
