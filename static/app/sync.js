@@ -11,7 +11,7 @@ Backbone.sync = function(method, model, options) {
         'rpc': JSON.stringify({
             jsonrpc : '2.0',
             method  : model.methods[method],
-            id      : String((new Date()).getTime()),
+            id      : _.uniqueId(),
             params  : model.toJSON(options)
         }),
         'provider': 'json'
