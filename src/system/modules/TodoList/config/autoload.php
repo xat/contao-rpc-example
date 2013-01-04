@@ -29,5 +29,5 @@ ClassLoader::addClasses(array
 	'Contao\Todo\DcaTodo'        => 'system/modules/TodoList/classes/DcaTodo.php',
 	'Contao\Todo\TodoController' => 'system/modules/TodoList/classes/TodoController.php',
 	// Models
-	'Contao\Todo\TodoModel'      => 'system/modules/TodoList/models/TodoModel.php',
+	'Contao\TodoModel'      => 'system/modules/TodoList/models/TodoModel.php',
 ));

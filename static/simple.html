@@ -13,9 +13,6 @@
 
                 var TodoModel = Backbone.Model.extend({
                     url: '/rpc.php',
-                    parse: function(resp) {
-                        return resp.result;
-                    },
                     postParams: {
                       'fe_username': 'j.smith',
                       'fe_password': 'johnsmith'
@@ -28,17 +25,40 @@
                     }
                 });
 
+                var TodoCollection = Backbone.Collection.extend({
+                    url: '/rpc.php',
+                    postParams: {
+                        'fe_username': 'j.smith',
+                        'fe_password': 'johnsmith'
+                    },
+                    model: TodoModel,
+                    methods: {
+                        read:   'Todo.retrieve'
+                    }
+                });
+
                 var todoItem = new TodoModel();
 
                 todoItem.set('title', 'Mit Hund Gassi gehen.');
                 todoItem.set('done', '1');
                 todoItem.save(null, {
-                    success: function() {
-                        console.log(todoItem.get('id'));
+                    success: function(model) {
+                        console.log(model.get('id'));
                     },
-                    error: function() {
+                    error: function(model, fail) {
+                        console.log(arguments);
                     }
                 });
+
+                var todoList = new TodoCollection();
+
+                todoList.fetch({
+                    success: function(collection) {
+                        collection.forEach(function(model) {
+                            console.log(model.get('title'));
+                        });
+                    }
+                })
             });
         })(jQuery, Backbone);
     </script>

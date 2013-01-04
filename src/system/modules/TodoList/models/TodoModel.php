@@ -10,7 +10,7 @@
  * @copyright Sebastian Tilch 2013
  */
 
-namespace Contao\Todo;
+namespace Contao;
 
 class TodoModel extends \Model
 {

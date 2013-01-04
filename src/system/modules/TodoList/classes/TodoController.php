@@ -32,7 +32,7 @@ class TodoController extends \System{
 	public function create($objRequest, $objResponse)
 	{
 		$objData = $objRequest->getParams();
-		$objTodo = new TodoModel();
+		$objTodo = new \TodoModel();
 
 		$objTodo->title  = $objData->title;
 		$objTodo->done   = $objData->done;
@@ -57,7 +57,7 @@ class TodoController extends \System{
 	public function retrieve($objRequest, $objResponse)
 	{
 		$arrData = array();
-		$objTodo = TodoModel::findAll();
+		$objTodo = \TodoModel::findAll();
 		while($objTodo->next())
 		{
 			$arrData[] = array
