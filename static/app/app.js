@@ -65,12 +65,26 @@
       'submit': 'add'
     },
 
+    initialize: function() {
+      this.model.on('change:hash', this.show, this);
+    },
+
     add: function(ev) {
       ev.preventDefault();
+      App.TaskModel = App.TaskModel.extend({
+        'postParams': {
+          'fe_hash': this.model.get('hash')
+        }
+      });
       var task = new App.TaskModel();
       task.set('title', this.$('#title').val());
+      task.set('done', '');
       task.save();
       this.collection.add(task);
+    },
+
+    show: function() {
+      this.$el.fadeIn();
     }
 
   });
@@ -111,10 +125,6 @@
 
     template: _.template($("#task-item").html()),
 
-    initialize: function() {
-      this.model.on('destroy', this.destroy, this);
-    },
-
     render: function() {
       this.$el.html(this.template(this.model.toJSON()));
       return this;
@@ -122,13 +132,7 @@
 
     remove: function() {
       this.model.destroy();
-    },
-
-    destroy: function() {
-      this.undelegateEvents();
-      this.$el.removeData().unbind();
       this.remove();
-      Backbone.View.prototype.remove.call(this);
     }
 
   });
