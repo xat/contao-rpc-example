@@ -13,6 +13,9 @@
 
                 var TodoModel = Backbone.Model.extend({
                     url: '/rpc.php',
+                    parse: function(resp) {
+                        return resp.result;
+                    },
                     postParams: {
                       'fe_username': 'j.smith',
                       'fe_password': 'johnsmith'
@@ -29,7 +32,13 @@
 
                 todoItem.set('title', 'Mit Hund Gassi gehen.');
                 todoItem.set('done', '1');
-                todoItem.save();
+                todoItem.save(null, {
+                    success: function() {
+                        console.log(todoItem.get('id'));
+                    },
+                    error: function() {
+                    }
+                });
             });
         })(jQuery, Backbone);
     </script>
