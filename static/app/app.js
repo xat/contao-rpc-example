@@ -29,7 +29,7 @@
 
     initialize: function() {
       this.model = new App.UserModel();
-      this.model.on('change:status', this.hide, this);
+      this.model.on('change:hash', this.hide, this);
     },
 
     login: function(ev) {
@@ -42,14 +42,14 @@
           fe_password: this.$('#password').val()
         },
         _.bind(function(data) {
-          console.log(data);
-          //this.model.set('hash', data.result.hash);
           if (data.error) {
               alertify.error(data.error.message);
+          } else {
+            this.model.set('hash', data.result);
+            alertify.success('Login succeeded');
           }
         }, this)
       );
-      console.log('login');
     },
 
     hide: function() {
@@ -141,7 +141,7 @@
   App.UserModel = Backbone.Model.extend({
 
     defaults: {
-      status: false
+      status: ''
     }
 
   });
