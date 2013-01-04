@@ -43,10 +43,10 @@
         },
         _.bind(function(data) {
           console.log(data);
-          this.model.set('hash', data.result.hash);
-        }, this),
-        _.bind(function() {
-          console.log('login failed');
+          //this.model.set('hash', data.result.hash);
+          if (data.error) {
+              alertify.error(data.error.message);
+          }
         }, this)
       );
       console.log('login');
@@ -193,7 +193,8 @@
 
       return $.ajax({
         url: '/rpc.php',
-        type : 'POST',
+        type: 'POST',
+        dataType: 'json',
         data: data,
         success: success,
         error: error
