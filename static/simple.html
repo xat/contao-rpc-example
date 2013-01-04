@@ -27,10 +27,6 @@
 
                 var TodoCollection = Backbone.Collection.extend({
                     url: '/rpc.php',
-                    postParams: {
-                        'fe_username': 'j.smith',
-                        'fe_password': 'johnsmith'
-                    },
                     model: TodoModel,
                     methods: {
                         read:   'Todo.retrieve'
