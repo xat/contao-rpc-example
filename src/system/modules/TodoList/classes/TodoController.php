@@ -35,7 +35,7 @@ class TodoController extends \System{
 		$objTodo = new \TodoModel();
 
 		$objTodo->title  = $objData->title;
-		$objTodo->done   = $objData->done;
+		$objTodo->done   = ($objData->done)? '1' : '';
 		$objTodo->author = $this->User->id;
 		$objTodo->tstamp = time();
 
@@ -82,8 +82,8 @@ class TodoController extends \System{
 		if (isset($objTodo))
 		{
 			$objTodo->title  = $objData->title;
-			$objTodo->done   = $objData->done;
-			//$objTodo->author = $this->User->id;
+			$objTodo->done   = ($objData->done)? '1' : '';
+			$objTodo->author = $this->User->id;
 			$objTodo->save();
 		}
 		else

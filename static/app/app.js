@@ -11,8 +11,8 @@
   App.MainView = Backbone.View.extend({
 
     initialize: function() {
-      this.collection = new App.TaskCollection();
       this.user = new App.UserModel();
+      this.collection = new App.TaskCollection();
 
       this.loginView = new App.LoginView({ el: this.$('#signup'), model: this.user });
       this.addView   = new App.AddTaskView({ el: this.$('#add'), collection: this.collection, model: this.user });
@@ -46,6 +46,8 @@
               alertify.error(data.error.message);
           } else {
             this.model.set('hash', data.result);
+            App.TaskModel.prototype.postParams = {'fe_hash': data.result};
+            App.TaskCollection.prototype.postParams = {'fe_hash': data.result};
             alertify.success('Login succeeded');
           }
         }, this)
@@ -71,14 +73,9 @@
 
     add: function(ev) {
       ev.preventDefault();
-      App.TaskModel = App.TaskModel.extend({
-        'postParams': {
-          'fe_hash': this.model.get('hash')
-        }
-      });
       var task = new App.TaskModel();
       task.set('title', this.$('#title').val());
-      task.set('done', '');
+      task.set('done', false);
       task.save();
       this.collection.add(task);
     },
@@ -109,6 +106,7 @@
     },
 
     add: function(task) {
+      alertify.log('Added Task: ' + task.get('title'));
       this.$el.append(new App.TaskItemView({ model: task }).render().el);
     }
 
@@ -126,25 +124,33 @@
 
     template: _.template($("#task-item").html()),
 
+    initialize: function() {
+      App.main.user.on('change:hash', this.showControls, this);
+    },
+
     render: function() {
       this.$el.html(this.template(this.model.toJSON()));
+      if (App.main.user.get('hash')) {
+        this.showControls();
+      }
       return this;
     },
 
     remove: function() {
       //this.remove();
+      alertify.log('Deleted Task: ' + this.model.get('title'));
       this.model.destroy();
       this.$el.remove();
     },
 
     done: function(ev) {
       ev.preventDefault();
-      if (this.model.get('done') === '1') {
-        this.model.set('done', '');
-      } else {
-        this.model.set('done', '1');
-      }
+      this.model.set('done', !this.model.get('done'));
       this.model.save();
+    },
+
+    showControls: function() {
+      this.$('.controls').show();
     }
 
   });
