@@ -4,17 +4,20 @@
   // This will be the entrypoint to our App
   var App = {};
 
-  /*
-   * VIEWS
-   */
+  App.config = {
+    'rpcUrl': '/rpc.php'
+  };
 
-  // Main App View
+  //The Main App View
   App.MainView = Backbone.View.extend({
 
     initialize:function () {
+
+      // Create the UserModel and the the TaskCollection
       this.user = new App.UserModel();
       this.tasks = new App.TaskCollection();
 
+      // create all sub-views
       this.loginView = new App.LoginView({ el:this.$('#signup'), model:this.user });
       this.addView = new App.TaskAddView({ el:this.$('#add'), collection:this.tasks, model:this.user });
       this.listView = new App.TaskListView({ el:this.$('#list'), collection:this.tasks });
@@ -22,7 +25,7 @@
 
   });
 
-  // Add Task Form
+  // AddTask Form
   App.TaskAddView = Backbone.View.extend({
 
     events:{
@@ -30,15 +33,22 @@
     },
 
     initialize:function () {
+      // show the AddTask-Form as soon a user logs in
       this.model.on('change:hash', this.show, this);
     },
 
     add:function (ev) {
       ev.preventDefault();
+
+      // Create a new instance of the Task instance
       var task = new App.TaskModel({
         'title':this.$('#title').val()
       });
+
+      // Save the task (push it to the Server)
       task.save();
+
+      // Add the task to the TaskCollection
       this.collection.add(task);
     },
 
@@ -52,17 +62,25 @@
   App.TaskListView = Backbone.View.extend({
 
     initialize:function () {
+
+      // render this view, as-soon the collection has items
       this.collection.on('reset', this.render, this);
+
+      // append the view with an added item
       this.collection.on('add', this.add, this);
+
+      // fetch the models from the server (sync)
       this.collection.fetch();
     },
 
     render:function () {
+
       // reset list
       this.$el.empty();
 
       // append list items
       this.collection.forEach(this.append, this);
+      return this;
     },
 
     add: function(task) {
@@ -71,12 +89,15 @@
     },
 
     append:function (task) {
+
+      // Create a new subview 'TaskItemView'
+      // and append it to this views table
       this.$el.append(new App.TaskItemView({ model:task }).render().el);
     }
 
   });
 
-  // Represents one Row in the Task List
+  // Represents one Row (tr) in the Task Table
   App.TaskItemView = Backbone.View.extend({
 
     tagName:'tr',
@@ -86,30 +107,51 @@
       'click .done':'done'
     },
 
+    // fetch the rows template content
     template:_.template($("#task-item").html()),
 
     initialize:function () {
+
+      // If the hash value of the user model changes, rerender
       App.main.user.on('change:hash', this.render, this);
+
+      // do the same if the 'done' property of the task-model changes
       this.model.on('change:done', this.render, this);
     },
 
     render:function () {
+      // compile the template and add it to this views DOM element
       this.$el.html(this.template(this.model.toJSON()));
+
+      // toggle the done-css-class based on the models done-property
       this.$el.toggleClass('done', this.model.get('done'));
+
+      // Show the Buttons 'Toggle' and 'Delete' if the User is logged in
       App.main.user.get('hash') && this.$('.controls').show();
+
       return this;
     },
 
     destroy:function (ev) {
       ev.preventDefault();
       alertify.log('Deleted Task: ' + this.model.get('title'));
+
+      // Destroy the Model
+      // This will also automaticly call 'Todo.delete' on the Server-Side
+      // and the model will also be removed from the collection
       this.model.destroy();
+
+      // Remove this View from the DOM
       this.remove();
     },
 
     done:function (ev) {
       ev.preventDefault();
+
+      // toggle the done-state of the task
       this.model.set('done', !this.model.get('done'));
+
+      // ...and sync it with the server
       this.model.save();
     }
 
@@ -124,11 +166,17 @@
     },
 
     initialize:function () {
+      // Hide the login-form as-soon the user has logged in
       this.model.on('change:hash', this.hide, this);
     },
 
     login:function (ev) {
       ev.preventDefault();
+
+      // Perform an RPC Request with username/password as POST-Parameters
+      // This calls the RPC-Method 'generateHash' which will give us
+      // back an hash (=token). With this hash the user authorize his
+      // further RPC-Requests
       App.utils.rpcRequest(
         'generateHash',
         {
@@ -137,11 +185,23 @@
         }
       ).success(_.bind(function (data) {
         if (data.error) {
+
+          // The JSON-RPC Response contains an Error.
+          // Show the Error to the User.
           alertify.error(data.error.message);
         } else {
+
+          // The Request was successful.
+          // Update the User-Model with the Hash
           this.model.set('hash', data.result);
+
+          // Modify TaskModel and TaskCollection by attaching the
+          // hash as postParameter.
+          // Each time the Model/Collection syncs with the server
+          // it will now also send the hash in an POST-Field
           App.TaskModel.prototype.postParams = {'fe_hash':data.result};
           App.TaskCollection.prototype.postParams = {'fe_hash':data.result};
+
           alertify.success('Login succeeded');
         }
       }, this));
@@ -167,8 +227,10 @@
 
   App.TaskModel = Backbone.Model.extend({
 
-    url:'/rpc.php',
+    url:App.config.rpcUrl,
 
+    // Map the CRUD verbs to
+    // RPC-Methods.
     methods:{
       'read':'Todo.retrieve',
       'create':'Todo.create',
@@ -188,10 +250,12 @@
 
   App.TaskCollection = Backbone.Collection.extend({
 
-    url:'/rpc.php',
+    url:App.config.rpcUrl,
 
     model:App.TaskModel,
 
+    // Map the CRUD verbs to
+    // RPC-Methods.
     methods:{
       read:'Todo.retrieve'
     }
@@ -202,6 +266,8 @@
 
     rpcRequest:function (method, postParams, rpcParams) {
 
+      // prepare the rpc-request which will get
+      // within a POST-Field
       var data = {
         rpc:JSON.stringify({
           jsonrpc:'2.0',
@@ -212,10 +278,13 @@
         provider:'json'
       };
 
+      // merge data and postParams
       _.defaults(data, postParams);
 
+      // Perform the Ajax-Request
+      // Using jQuerys $.ajax()
       return $.ajax({
-        url:'/rpc.php',
+        url:App.config.rpcUrl,
         type:'POST',
         dataType:'json',
         data:data
