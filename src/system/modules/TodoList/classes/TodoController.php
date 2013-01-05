@@ -82,8 +82,8 @@ class TodoController extends \System{
 		if (isset($objTodo))
 		{
 			$objTodo->title  = $objData->title;
-			$objTodo->done   = strlen($objData->done);
-			$objTodo->author = $this->User->id;
+			$objTodo->done   = $objData->done;
+			//$objTodo->author = $this->User->id;
 			$objTodo->save();
 		}
 		else

@@ -120,7 +120,8 @@
     tagName: 'tr',
 
     events: {
-      'click .remove': 'remove'
+      'click .remove': 'remove',
+      'click .done': 'done'
     },
 
     template: _.template($("#task-item").html()),
@@ -134,6 +135,16 @@
       //this.remove();
       this.model.destroy();
       this.$el.remove();
+    },
+
+    done: function(ev) {
+      ev.preventDefault();
+      if (this.model.get('done') === '1') {
+        this.model.set('done', '');
+      } else {
+        this.model.set('done', '1');
+      }
+      this.model.save();
     }
 
   });
