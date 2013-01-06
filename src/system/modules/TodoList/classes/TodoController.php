@@ -65,7 +65,7 @@ class TodoController extends \System{
 		$arrData = array();
 		$objTodo = \TodoModel::findAll();
 
-		if ($objTodo->id)
+		if (!is_null($objTodo))
 		{
 			while($objTodo->next())
 			{
