@@ -96,6 +96,7 @@ class TodoController extends \System{
 			$objTodo->done   = ($objData->done)? '1' : '';
 			$objTodo->author = $this->User->id;
 			$objTodo->save();
+			$objResponse->setData('OK');
 		}
 		else
 		{
@@ -113,10 +114,9 @@ class TodoController extends \System{
 		$objData = $objRequest->getParams();
 		$objTodo = \TodoModel::findByPk($objData->id);
 
-		if (isset($objTodo))
+		if (isset($objTodo) && $objTodo->delete() === 1)
 		{
-			$objTodo->delete();
-			//$objResponse->setData($objData->id);
+			$objResponse->setData('OK');
 		}
 		else
 		{
