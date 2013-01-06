@@ -50,6 +50,7 @@ class TodoController extends \System{
 				'done'  => strlen($objTodo->done) ? true : false
 			);
 			$objResponse->setData($arrData);
+			$this->updateClients();
 		}else{
 			$objResponse->setErrorType(\Contao\Rpc\RpcResponse::INVALID_PARAMS);
 		}
@@ -97,6 +98,7 @@ class TodoController extends \System{
 			$objTodo->author = $this->User->id;
 			$objTodo->save();
 			$objResponse->setData('OK');
+			$this->updateClients();
 		}
 		else
 		{
@@ -117,10 +119,22 @@ class TodoController extends \System{
 		if (isset($objTodo) && $objTodo->delete() === 1)
 		{
 			$objResponse->setData('OK');
+			$this->updateClients();
 		}
 		else
 		{
 			$objResponse->setErrorType(\Contao\Rpc\RpcResponse::INVALID_PARAMS);
+		}
+	}
+
+	/**
+	 * Update all clients if Notify is installed
+	 */
+	protected function updateClients()
+	{
+		if (class_exists('Notify'))
+		{
+			Notify::getInstance()->emit('update', array());
 		}
 	}
 }
