@@ -24,7 +24,7 @@
         var success = options.success;
         var error = options.error;
         options.success = function (resp, status, xhr) {
-            if (resp.result) {
+            if (!resp.error) {
                 if (success) {
                     success(resp.result, status, xhr);
                 }

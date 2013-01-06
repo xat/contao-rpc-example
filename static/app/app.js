@@ -47,16 +47,16 @@
             });
 
             // Save the task (push it to the Server)
-            task.save()
-                .success(_.bind(function() {
-
-                    // Add the task to the TaskCollection
-                    alertify.success('Added Task: ' + task.get('title'));
-                    this.collection.add(task);
-                }, this))
-                .error(_.bind(function() {
-                    alertify.error('Could not add Task: ' + task.get('title'));
-                }, this));
+            task.save(null, {
+               success:_.bind(function (task) {
+                   // Add the task to the TaskCollection
+                   alertify.success('Added Task: ' + task.get('title'));
+                   this.collection.add(task);
+               }, this),
+               error:function (task, err) {
+                   alertify.error(err.message);
+               }
+            });
         },
 
         show:function () {
@@ -139,18 +139,16 @@
             // Destroy the Model
             // This will also automaticly call 'Todo.delete' on the Server-Side
             // and the model will also be removed from the collection
-            this.model.destroy()
-                .success(_.bind(function() {
-                    alertify.success('Deleted Task: ' + this.model.get('title'));
-                },
-                this))
-                .error(_.bind(function() {
-                    alertify.error('Could not delete Task: ' + this.model.get('title'));
-                },
-                this));
-
-            // Remove this View from the DOM
-            this.remove();
+            this.model.destroy({
+                success:_.bind(function (task) {
+                    alertify.success('Deleted Task: ' + task.get('title'));
+                    // Remove this View from the DOM
+                    this.remove();
+                }, this),
+                error:function (task, err) {
+                    alertify.error(err.message);
+                }
+            });
         },
 
         done:function (ev) {
