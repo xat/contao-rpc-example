@@ -18,6 +18,7 @@
             this.tasks = new App.TaskCollection();
 
             // create all sub-views
+            this.introView = new App.IntroView({ el:this.$('#intro') });
             this.loginView = new App.LoginView({ el:this.$('#signup'), model:this.user });
             this.addView = new App.TaskAddView({ el:this.$('#add'), collection:this.tasks, model:this.user });
             this.listView = new App.TaskListView({ el:this.$('#list'), collection:this.tasks });
@@ -40,7 +41,7 @@
         add:function (ev) {
             ev.preventDefault();
 
-            // Create a new instance of the Task instance
+            // Create a new instance of Task
             var task = new App.TaskModel({
                 'title':this.$('#title').val()
             });
@@ -209,6 +210,19 @@
 
         hide:function () {
             this.$el.fadeOut();
+        }
+
+    });
+
+    // Intro Text
+    App.IntroView = Backbone.View.extend({
+
+        events:{
+            'click .close':'hide'
+        },
+
+        hide:function () {
+            this.$el.slideUp();
         }
 
     });

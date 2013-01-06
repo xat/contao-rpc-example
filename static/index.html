@@ -19,6 +19,25 @@
 <body>
 <div id="app" class="container">
 
+    <div id="intro" class="well">
+        <button class="close">&times;</button>
+        <h4>Basic usage example of <strong>contao-rpc</strong></h4>
+        <p>
+            For demonstration we have setup this basic CRUD application with a sign-in process.
+            As you see this GUI is completely encapsulated from the Contao installation. The GUI is hosted
+            on Github and Contao is running on a separate Server. The only point of contact between GUI and Contao
+            is through contao-rpc.
+        </p>
+        <p>
+            Sign-In can be proceeded with any Frontend-User of the "Musikakademie" Theme. To get a better understanding how the GUI communicates
+            with contao it's recommended that you open up the Devtools of your browser and inspect the Ajax Requests
+            within the network tab.
+        </p>
+        <p>Checkout the Server-Side code of the application <a href="https://github.com/xat/contao-rpc-example/tree/master/src/system/modules/TodoList">here</a>.
+        The GUI is built with Backbone.JS, jQuery and Bootstrap and can be viewed <a href="https://github.com/xat/contao-rpc-example/tree/master/static">here</a>.
+        </p>
+    </div>
+
     <div class="row">
         <div class="span8">
             <h4>TODOs</h4>
