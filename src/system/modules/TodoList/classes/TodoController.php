@@ -64,15 +64,20 @@ class TodoController extends \System{
 	{
 		$arrData = array();
 		$objTodo = \TodoModel::findAll();
-		while($objTodo->next())
+
+		if ($objTodo->id)
 		{
-			$arrData[] = array
-			(
-				'id'    => $objTodo->id,
-				'title' => $objTodo->title,
-				'done'  => strlen($objTodo->done) ? true : false
-			);
+			while($objTodo->next())
+			{
+				$arrData[] = array
+				(
+					'id'    => $objTodo->id,
+					'title' => $objTodo->title,
+					'done'  => strlen($objTodo->done) ? true : false
+				);
+			}
 		}
+
 		$objResponse->setData($arrData);
 	}
 
