@@ -47,10 +47,16 @@
             });
 
             // Save the task (push it to the Server)
-            task.save();
+            task.save()
+                .success(_.bind(function() {
 
-            // Add the task to the TaskCollection
-            this.collection.add(task);
+                    // Add the task to the TaskCollection
+                    alertify.success('Added Task: ' + task.get('title'));
+                    this.collection.add(task);
+                }, this))
+                .error(_.bind(function() {
+                    alertify.error('Could not add Task: ' + task.get('title'));
+                }, this));
         },
 
         show:function () {
@@ -80,17 +86,11 @@
             this.$el.empty();
 
             // append list items
-            this.collection.forEach(this.append, this);
+            this.collection.forEach(this.add, this);
             return this;
         },
 
         add:function (task) {
-            alertify.log('Added Task: ' + task.get('title'));
-            this.append(task);
-        },
-
-        append:function (task) {
-
             // Create a new subview 'TaskItemView'
             // and append it to this views table
             this.$el.append(new App.TaskItemView({ model:task }).render().el);
@@ -135,12 +135,19 @@
 
         destroy:function (ev) {
             ev.preventDefault();
-            alertify.log('Deleted Task: ' + this.model.get('title'));
 
             // Destroy the Model
             // This will also automaticly call 'Todo.delete' on the Server-Side
             // and the model will also be removed from the collection
-            this.model.destroy();
+            this.model.destroy()
+                .success(_.bind(function() {
+                    alertify.success('Deleted Task: ' + this.model.get('title'));
+                },
+                this))
+                .error(_.bind(function() {
+                    alertify.error('Could not delete Task: ' + this.model.get('title'));
+                },
+                this));
 
             // Remove this View from the DOM
             this.remove();
