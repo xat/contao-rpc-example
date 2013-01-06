@@ -33,7 +33,7 @@ class TodoController extends \System{
 	public function create($objRequest, $objResponse)
 	{
 		$objData = $objRequest->getParams();
-		if (strlen($objData) > 0)
+		if (strlen($objData->title) > 0)
 		{
 			$objTodo = new \TodoModel();
 
