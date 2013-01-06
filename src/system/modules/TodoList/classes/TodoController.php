@@ -33,21 +33,26 @@ class TodoController extends \System{
 	public function create($objRequest, $objResponse)
 	{
 		$objData = $objRequest->getParams();
-		$objTodo = new \TodoModel();
+		if (strlen($objData) > 0)
+		{
+			$objTodo = new \TodoModel();
 
-		$objTodo->title  = $objData->title;
-		$objTodo->done   = ($objData->done)? '1' : '';
-		$objTodo->author = $this->User->id;
-		$objTodo->tstamp = time();
+			$objTodo->title  = $objData->title;
+			$objTodo->done   = ($objData->done)? '1' : '';
+			$objTodo->author = $this->User->id;
+			$objTodo->tstamp = time();
 
-		$objTodo = $objTodo->save();
-		$arrData = array
-		(
-			'id'    => $objTodo->id,
-			'title' => $objTodo->title,
-			'done'  => strlen($objTodo->done) ? true : false
-		);
-		$objResponse->setData($arrData);
+			$objTodo = $objTodo->save();
+			$arrData = array
+			(
+				'id'    => $objTodo->id,
+				'title' => $objTodo->title,
+				'done'  => strlen($objTodo->done) ? true : false
+			);
+			$objResponse->setData($arrData);
+		}else{
+			$objResponse->setErrorType(\Contao\Rpc\RpcResponse::INVALID_PARAMS);
+		}
 	}
 
 	/**
@@ -80,7 +85,7 @@ class TodoController extends \System{
 	{
 		$objData = $objRequest->getParams();
 		$objTodo = \TodoModel::findByPk($objData->id);
-		if (isset($objTodo))
+		if (isset($objTodo) || strlen($objData->title)>0)
 		{
 			$objTodo->title  = $objData->title;
 			$objTodo->done   = ($objData->done)? '1' : '';
