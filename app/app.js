@@ -5,7 +5,7 @@
     var App = {};
 
     App.config = {
-        'rpcUrl':'/rpc.php'
+        'rpcUrl':'http://contao.pixelquote.com/rpc.php'
     };
 
     //The Main App View
