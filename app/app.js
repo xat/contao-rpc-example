@@ -1,4 +1,4 @@
-(function ($, Backbone, _, win, alertify) {
+(function ($, Backbone, _, win, alertify, io) {
     'use strict';
 
     // This will be the entrypoint to our App
@@ -321,6 +321,17 @@
         // Export App
         win.App = App;
 
+        // small gimmik:
+        // if notify is availible update the collection if
+        // it gets changed on the server side
+
+        if (typeof io !== 'undefined') {
+            var socket = io.connect('http://pixelquote.com:4450/');
+            socket.on('update', function (data) {
+                App.main.tasks.fetch();
+            });
+        }
+
     });
 
-})(jQuery, Backbone, _, window, alertify);
+})(jQuery, Backbone, _, window, alertify, io);
