@@ -10,6 +10,7 @@
  * @copyright Sebastian Tilch 2013
  */
 
+
 namespace Contao\Todo;
 
 /**
@@ -88,7 +89,7 @@ class TodoController extends \System{
 		}
 		else
 		{
-			$objResponse->setErrorType(RpcResponse::INVALID_PARAMS);
+			$objResponse->setErrorType(\Contao\Rpc\RpcResponse::INVALID_PARAMS);
 		}
 	}
 
@@ -109,7 +110,7 @@ class TodoController extends \System{
 		}
 		else
 		{
-			$objResponse->setErrorType(RpcResponse::INVALID_PARAMS);
+			$objResponse->setErrorType(\Contao\Rpc\RpcResponse::INVALID_PARAMS);
 		}
 	}
 }
