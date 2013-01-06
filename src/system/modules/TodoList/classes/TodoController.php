@@ -132,9 +132,9 @@ class TodoController extends \System{
 	 */
 	protected function updateClients()
 	{
-		if (class_exists('Notify'))
+		if (class_exists('\Notify'))
 		{
-			Notify::getInstance()->emit('update', array());
+			\Notify::getInstance()->emit('update', array());
 		}
 	}
 }
