@@ -325,12 +325,14 @@
         // if notify is availible update the collection if
         // it gets changed on the server side
 
+        /*
         if (typeof io !== 'undefined') {
             var socket = io.connect('http://pixelquote.com:4450/');
             socket.on('update', function (data) {
                 App.main.tasks.fetch();
             });
         }
+        */
 
     });
 
