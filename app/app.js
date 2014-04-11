@@ -1,4 +1,4 @@
-(function ($, Backbone, _, win, alertify, io) {
+(function ($, Backbone, _, win, alertify) {
     'use strict';
 
     // This will be the entrypoint to our App
@@ -336,4 +336,4 @@
 
     });
 
-})(jQuery, Backbone, _, window, alertify, io);
+})(jQuery, Backbone, _, window, alertify);
